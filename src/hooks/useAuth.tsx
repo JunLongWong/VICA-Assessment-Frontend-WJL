@@ -49,7 +49,7 @@ export const useAuth = () => {
   };
 
   return {
-    // avoid re-renders for similar inputs
+    // avoid unneccessary recomputing 
     loggedUser: useMemo(
       () => ({
         token,
