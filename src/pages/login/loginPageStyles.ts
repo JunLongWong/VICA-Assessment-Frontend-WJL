@@ -17,6 +17,9 @@ const Styles = makeStyles(() => ({
         minHeight: '30vh',
         padding: 50,
     },
+    loginError: {
+        color: "red",
+    }
 }))
 
 export default Styles
