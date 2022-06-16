@@ -9,3 +9,12 @@ export interface IUser {
     status: UserStatus;
     date_joined: string;
 }
+export interface IBook {
+    _id: string;
+    title: string;
+    description: string;
+    genre: string;
+    author: string;
+    published_year: number;
+    quantity: number
+}
