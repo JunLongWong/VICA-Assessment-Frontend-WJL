@@ -3,11 +3,16 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 import {api} from './Api/api'
 import authReducer from './auth/authSlice';
+import bookReducer from './books/bookSlice';
+import userReducer from './user/userSlice';
 
 export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
     auth: authReducer,
+    user: userReducer,
+    book: bookReducer,
+    
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
 });
