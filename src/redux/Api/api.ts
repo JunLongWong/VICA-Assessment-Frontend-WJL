@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { RootState } from '../store';
-import { IBook, IUser } from './types';
+import { IBook, IUser } from './model/types';
 
 
 export const api = createApi({
@@ -50,9 +50,16 @@ export const api = createApi({
     getAllBook: builder.query<{ Books: { bookList: IBook[] } }, null>({
       query: () => ({ url: `books/` }),
     }),
+    deleteBook: builder.mutation<{ Book: IBook }, string>({
+      query: (id) => ({
+        url: `books/${id}`,
+        method: "DELETE"
+      })
+    }),
 
   }),
 })
+
 
 export const {
   useGetUserQuery,
@@ -61,4 +68,5 @@ export const {
   useCreateUserMutation,
   useUpdateUserMutation,
   useGetAllBookQuery,
+  useDeleteBookMutation,
 } = api
