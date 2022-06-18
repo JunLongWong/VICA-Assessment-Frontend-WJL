@@ -1,12 +1,12 @@
-import { UserRoleEnum } from "../../models/UserRoleEnum";
-import { UserStatus } from "../../models/userStatusEnum";
+import { UserRoleEnum } from "../../../models/UserRoleEnum";
+import { UserStatusEnum } from "../../../models/userStatusEnum";
 
 export interface IUser {
     _id: string;
     email: string;
     name: string;
     role: UserRoleEnum;
-    status: UserStatus;
+    status: UserStatusEnum;
     date_joined: string;
 }
 export interface IBook {
