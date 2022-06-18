@@ -3,5 +3,4 @@ export enum UserRoleEnum {
     ADMIN = 'ADMIN',
     EDITOR = 'EDITOR',
     MEMBER = 'MEMBER',
-    indexOf = "indexOf"
 }
