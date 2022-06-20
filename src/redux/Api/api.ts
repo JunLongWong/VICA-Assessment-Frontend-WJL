@@ -1,7 +1,26 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { UserRoleEnum } from '../../models/UserRoleEnum';
+import { UserStatusEnum } from '../../models/userStatusEnum';
 import { RootState } from '../store';
 import { IBook, IUser } from './model/types';
 
+export interface createUserRequest {
+  _id?: string;
+  email: string;
+  name: string;
+  password: string;
+  role: UserRoleEnum;
+  status: UserStatusEnum;
+}
+
+export interface createBookRequest {
+  title: string;
+  description: string;
+  genre: string;
+  author: string;
+  published_year: number;
+  quantity: number;
+}
 
 export const api = createApi({
   reducerPath: 'api',
@@ -32,14 +51,14 @@ export const api = createApi({
       })
     }),
 
-    createUser: builder.mutation<{ user: IUser }, null>({
+    createUser: builder.mutation<{ user: IUser }, createUserRequest>({
       query: (user) => ({
         url: `users`,
         method: "POST",
         body: user
       })
     }),
-    updateUser: builder.mutation<{ user: IUser }, IUser>({
+    updateUser: builder.mutation<{ user: IUser }, createUserRequest>({
       query: ({ _id, ...rest }) => ({
         url: `users/${_id}`,
         method: "PUT",
@@ -47,9 +66,33 @@ export const api = createApi({
       })
     }),
 
+
+
+
+    getBook: builder.query<{ Book: IBook }, string>({
+      query: (id) => ({ url: `books/${id}` }),
+
+    }),
+
     getAllBook: builder.query<{ Books: { bookList: IBook[] } }, null>({
       query: () => ({ url: `books/` }),
     }),
+
+    createBook: builder.mutation<{ Book: IBook }, createBookRequest>({
+      query: (user) => ({
+        url: `books`,
+        method: "POST",
+        body: user
+      })
+    }),
+    updateBook: builder.mutation<{ Book: IBook }, IBook>({
+      query: ({ _id, ...rest }) => ({
+        url: `books/${_id}`,
+        method: "PUT",
+        body: rest
+      })
+    }),
+
     deleteBook: builder.mutation<{ Book: IBook }, string>({
       query: (id) => ({
         url: `books/${id}`,
@@ -67,6 +110,9 @@ export const {
   useDeleteUserMutation,
   useCreateUserMutation,
   useUpdateUserMutation,
+  useGetBookQuery,
   useGetAllBookQuery,
+  useCreateBookMutation,
+  useUpdateBookMutation,
   useDeleteBookMutation,
 } = api
