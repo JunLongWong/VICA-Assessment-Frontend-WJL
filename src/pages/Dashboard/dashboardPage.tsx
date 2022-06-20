@@ -1,15 +1,4 @@
-import {
-    Button,
-    TextField,
-    Grid,
-    Paper,
-    AppBar,
-    Typography,
-    Toolbar,
-    Link,
-} from '@material-ui/core';
 import AppBarHeader from '../../components/header';
-
 import {
     BarChart,
     Bar,
@@ -21,62 +10,34 @@ import {
     Label,
     LabelList,
 } from "recharts";
+import { useAppSelector } from '../../redux/store';
+import { getAllBookList } from '../../redux/books/bookSlice';
+import { dataTransform } from '../../utils/DashboardDataTransform';
 
 const Dashboard = () => {
+    const booklist = useAppSelector(getAllBookList);
 
-    const data = [
-        {
-            name: "Book 1",
-            uv: 4000,
-        },
-        {
-            name: "Book 2",
-            uv: 3000,
-        },
-        {
-            name: "Book 3",
-            uv: 2000,
-        },
-        {
-            name: "Book 4",
-            uv: 2780,
-        },
-        {
-            name: "Book 5",
-            uv: 1890,
-        },
+    const genreArrDuplicate = booklist.map(book => book.genre)
+    const genreArrCounter = dataTransform(booklist, genreArrDuplicate)
+    const genreArr = []
+    for (let key in genreArrCounter) {
+        genreArr.push({ name: key, Quantity: genreArrCounter[key] })
+    }
 
-    ];
-    const dataYearPublished = [{ year: 2012, qty: 3000 },
-    { year: '2013', qty: 4000 },
-    { year: '2014', qty: 5000 },
-    { year: '2015', qty: 5000 },
-    { year: '2016', qty: 5000 },
-    { year: '2017', qty: 5000 },
-    { year: '2018', qty: 5000 },
-    { year: '2019', qty: 5000 },
-    { year: '2020', qty: 5000 },
-    { year: '2021', qty: 5000 },
-    { year: '2022', qty: 5000 },
-    { year: '2023', qty: 5000 },
-    { year: '2024', qty: 5000 },
-    { year: '2025', qty: 5000 },
-    { year: '2026', qty: 5000 },
-    { year: '2027', qty: 5000 },
-    { year: '2014', qty: 5000 },
-    { year: '2014', qty: 5000 },
-    { year: '2014', qty: 5000 },
-    { year: '2014', qty: 5000 },
-    { year: '2014', qty: 5000 },
-    { year: '2014', qty: 5000 }]
+    const yearArrDuplicate = booklist.map(book => book.published_year)
+    const yearArrCounter = dataTransform(booklist, yearArrDuplicate)
+    const yearArr = []
+    for (let key in yearArrCounter) {
+        yearArr.push({ name: key, Quantity: yearArrCounter[key] })
+    }
+
     return (
         <div>
             <AppBarHeader headerName='ABC Books Analytics Dashboard' />
-
             <BarChart style={{ padding: 2, margin: 80 }}
                 width={1000}
                 height={300}
-                data={data}
+                data={genreArr}
                 margin={{
                     top: 25, right: 30, left: 20, bottom: 15
                 }}
@@ -89,28 +50,28 @@ const Dashboard = () => {
                 <YAxis label={{ value: 'No. Of Books', angle: -90, position: 'insideLeft' }} />
                 <Tooltip />
                 <Legend verticalAlign="top" />
-                <Bar dataKey="uv" fill="#82ca9d">
-                    <LabelList dataKey="name" position="top" />
+                <Bar dataKey="Quantity" fill="#82ca9d">
+                    <LabelList dataKey="" position="top" />
                 </Bar>
             </BarChart>
 
             <BarChart style={{ padding: 2, margin: 80 }}
                 width={1200}
                 height={300}
-                data={dataYearPublished}
+                data={yearArr}
                 margin={{
                     top: 25, right: 30, left: 20, bottom: 15
                 }}
             >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="year" >
+                <XAxis dataKey="name" >
                     <Label value="Year Published" offset={-10} position='insideBottom' />
                 </XAxis>
 
                 <YAxis label={{ value: 'No. Of Books', angle: -90, position: 'insideLeft' }} />
                 <Tooltip />
                 <Legend verticalAlign="top" />
-                <Bar dataKey="qty" fill="#82ca9d">
+                <Bar dataKey="Quantity" fill="#82ca9d">
                     <LabelList dataKey="" position="top" />
                 </Bar>
             </BarChart>
