@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import {
   Button,
@@ -9,16 +9,28 @@ import {
 } from '@material-ui/core';
 import useStyles from './loginPageStyles';
 import AppBarHeader from "../../components/header";
+import { useNavigate } from "react-router-dom";
+
 
 const LoginPage: React.FC = () => {
   const classes = useStyles()
+  const navigate = useNavigate()
 
   const {
-    tryLogin: { login, isLoginRejected }
+    tryLogin: { login, isLoginRejected },
+    loggedUser
   } = useAuth();
+  useEffect(() => {
+    if (loggedUser.isSuccess && loggedUser.token) {
+      navigate("/index")
+    }
+
+  }, [loggedUser.isSuccess, loggedUser.token, navigate])
+
 
   const [email, setEmail] = useState('')
   const [password, setPassWord] = useState('')
+
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
