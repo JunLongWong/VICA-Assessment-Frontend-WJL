@@ -1,10 +1,9 @@
-export const dataTransform = (dataArrObj: any, dataArrDuplicate: any) => {
-    const counter: any = {}
+export const dataTransform = (dataArrlist: any[], type: string) => {
+    const dataArr: any[] = []
 
-    dataArrDuplicate.forEach((element: any) => {
-        let k = JSON.stringify(element);
-        counter[k] = (counter[k] || 0) + 1
+    dataArrlist.map(obj => {
+        dataArr.push({ name: obj.type, Quantity: obj.quantity })
     })
 
-    return counter
+    return dataArr
 }
