@@ -12,12 +12,29 @@ import {
 } from "recharts";
 import { useAppSelector } from '../../redux/store';
 import { getAllBookList } from '../../redux/books/bookSlice';
-import { dataTransform } from '../../utils/DashboardDataTransform';
 
-const Dashboard = () => {
+type GenreArray = {
+    name: string,
+    Quantity: number
+}
+
+type yearArray = {
+    name: number,
+    Quantity: number
+}
+
+const Dashboard: React.FC = () => {
     const booklist = useAppSelector(getAllBookList);
-    const genreDataArray = dataTransform(booklist, "genre")
-    const yearDataArray = dataTransform(booklist, "published_year")
+
+    const genreDataArray: GenreArray[] = []
+    booklist.map(obj => {
+        genreDataArray.push({ name: obj.genre, Quantity: obj.quantity })
+    })
+
+    const yearDataArray: yearArray[] = []
+    booklist.map(obj => {
+        yearDataArray.push({ name: obj.published_year, Quantity: obj.quantity })
+    })
 
     return (
         <div>
