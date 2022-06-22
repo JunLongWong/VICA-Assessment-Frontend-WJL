@@ -8,6 +8,7 @@ import {
   selectUser, selectUserId
 } from "../redux/auth/authSlice";
 import jwt_decode from "jwt-decode"
+import { UserRoleEnum } from "../models/UserRoleEnum";
 
 
 export const useAuth = () => {
@@ -51,19 +52,27 @@ export const useAuth = () => {
   };
 
   const decodeJwt = (token: string) => {
-    if (token) {
+    if (token !== "") {
       return jwt_decode(token)
     }
-    else { return false }
   }
+
   const getLoggedInUserRole = () => {
     try {
-      const decodedJwtToken: any = decodeJwt(token)
-      const currentUserRole = decodedJwtToken.role
-      return currentUserRole
-    } catch (error) {
-      console.log("error decoding token")
+      if (token !== "") {
+        const decodedJwtToken: any = decodeJwt(token)
+        const currentUserRole = decodedJwtToken.role
+        return currentUserRole
+      }
+    } catch (err) {
+      console.log("Invalid Jwt Token: ", err)
     }
+  }
+
+  const isAuthorized = (authorizeUsers: UserRoleEnum[]) => {
+    if (token === "") { return false; }
+    if (authorizeUsers.indexOf(getLoggedInUserRole()) === -1) { return false; }
+    return true
   }
 
   return {
@@ -82,5 +91,7 @@ export const useAuth = () => {
     tryLogin: { login, isLoginRejected, isLoginSuccessful },
     logout,
     getLoggedInUserRole,
+    decodeJwt,
+    isAuthorized,
   };
 };
