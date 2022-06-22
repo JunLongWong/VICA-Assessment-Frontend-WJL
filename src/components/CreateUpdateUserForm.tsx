@@ -19,12 +19,10 @@ import { UserRoleEnum } from '../models/UserRoleEnum';
 import { UserStatusEnum } from '../models/userStatusEnum';
 import { useCreateUserMutation, useGetUserQuery, useUpdateUserMutation } from '../redux/Api/api';
 
-
 type Props = {
   action: string
   data?: string
 }
-
 
 const CreateUpdateUserForm: any = ({ action, data }: Props) => {
   const [open, setOpen] = useState(false);
