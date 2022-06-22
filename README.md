@@ -24,6 +24,8 @@ Dashboard & Analytics:
 ### Screenshots of pages
 ![fe1][fe1]
 ![fe2][fe2]
+![fe3][fe3]
+![fe4][fe4]
 
 ## Available Scripts
 
@@ -69,6 +71,7 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 To learn React, check out the [React documentation](https://reactjs.org/).
 
 
-
-[fe1]: src/screenshots/bookPage.png
-[fe2]: src/screenshots/DashboardPage.png
+[fe1]: src/screenshots/loginPage.png
+[fe2]: src/screenshots/userPage.png
+[fe3]: src/screenshots/bookPage.png
+[fe4]: src/screenshots/DashboardPage.png
