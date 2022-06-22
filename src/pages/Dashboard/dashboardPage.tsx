@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { useAppSelector } from '../../redux/store';
 import { getAllBookList } from '../../redux/books/bookSlice';
+import { IBook } from '../../redux/Api/model/types';
 
 type GenreArray = {
     name: string,
@@ -27,12 +28,12 @@ const Dashboard: React.FC = () => {
     const booklist = useAppSelector(getAllBookList);
 
     const genreDataArray: GenreArray[] = []
-    booklist.map(obj => {
+    booklist.map((obj: IBook) => {
         genreDataArray.push({ name: obj.genre, Quantity: obj.quantity })
     })
 
     const yearDataArray: yearArray[] = []
-    booklist.map(obj => {
+    booklist.map((obj: IBook) => {
         yearDataArray.push({ name: obj.published_year, Quantity: obj.quantity })
     })
 
