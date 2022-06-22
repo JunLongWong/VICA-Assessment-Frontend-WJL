@@ -20,6 +20,7 @@ const LoginPage: React.FC = () => {
     tryLogin: { login, isLoginRejected },
     loggedUser
   } = useAuth();
+
   useEffect(() => {
     if (loggedUser.isSuccess && loggedUser.token) {
       navigate("/index")
