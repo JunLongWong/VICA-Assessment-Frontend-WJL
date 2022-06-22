@@ -2,6 +2,24 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Redux Store libraries used:
+
+- Redux Toolkit for State Management.
+- RTK Query for data fetching (full compatibility with Typescript) through
+	- API slice list all server base URL & endpoints for data fetching.
+
+All base pages are stored in the pages folder.
+Common re-usable components are stored in components folder.
+
+Authentication & Authorization [yet to complete]:
+Jwt token is stored on local storage.
+Upon login, it will be set on the store once login request is fulfilled.
+Custom useAuth() hooks to encapsulate login,logout & management of token.
+
+Dashboard & Analytics:
+- Bar charts used to render breakdown of books by genre && year published.
+- Libraries used: Re-charts
+
 ## Available Scripts
 
 In the project directory, you can run:
