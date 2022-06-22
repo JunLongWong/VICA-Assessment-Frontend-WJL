@@ -103,6 +103,11 @@ const CreateUpdateUserForm: any = ({ action, data }: Props) => {
           status: status
         })
     }
+    setName("")
+    setEmail("")
+    setPassword("")
+    setRole(UserRoleEnum.MEMBER)
+    setStatus(UserStatusEnum.INACTIVE)
     setOpen(false)
   }
 

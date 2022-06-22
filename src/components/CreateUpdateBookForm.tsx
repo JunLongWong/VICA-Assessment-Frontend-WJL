@@ -106,7 +106,12 @@ const CreateUpdateBookForm: any = ({ action, data }: Props) => {
         quantity: quantity
       })
     }
-
+    setTitle("")
+    setDescription("")
+    setGenre("")
+    setAuthor("")
+    setPublishedYear(1990)
+    setQuantity(1)
     setOpen(false)
   }
 
