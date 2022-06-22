@@ -20,6 +20,11 @@ Dashboard & Analytics:
 - Bar charts used to render breakdown of books by genre && year published.
 - Libraries used: Re-charts
 
+
+### Screenshots of pages
+![fe1][fe1]
+![fe2][fe2]
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -62,3 +67,8 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+
+[fe1]: src/screenshots/bookPage.png
+[fe2]: src/screenshots/DashboardPage.png
