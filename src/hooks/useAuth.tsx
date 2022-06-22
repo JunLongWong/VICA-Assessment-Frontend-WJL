@@ -7,15 +7,16 @@ import {
   selectToken, logout as handleLogout,
   selectUser, selectUserId
 } from "../redux/auth/authSlice";
+import jwt_decode from "jwt-decode"
+
 
 export const useAuth = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const token = useAppSelector(selectToken);
+  const token: string = useAppSelector(selectToken);
   const userid = useAppSelector(selectUserId);
-
-  console.log("user role>>>>> " + useAppSelector(selectUser)?.role)
+  const userObj = useAppSelector(selectUser)
 
   // automatically handles logout once the token and userid are removed from redux
   // update localStorage in sync with the store
@@ -29,6 +30,7 @@ export const useAuth = () => {
     isLoading: isLoadingLoggedUser,
     error,
     isError,
+    isSuccess,
   } = useGetUserQuery(userid ?? "", {
     skip: !userid,
   });
@@ -48,6 +50,22 @@ export const useAuth = () => {
     navigate("/");
   };
 
+  const decodeJwt = (token: string) => {
+    if (token) {
+      return jwt_decode(token)
+    }
+    else { return false }
+  }
+  const getLoggedInUserRole = () => {
+    try {
+      const decodedJwtToken: any = decodeJwt(token)
+      const currentUserRole = decodedJwtToken.role
+      return currentUserRole
+    } catch (error) {
+      console.log("error decoding token")
+    }
+  }
+
   return {
     // avoid unneccessary recomputing 
     loggedUser: useMemo(
@@ -57,10 +75,12 @@ export const useAuth = () => {
         isLoading: isLoadingLoggedUser,
         error,
         isError,
+        isSuccess
       }),
-      [token, userData, isLoadingLoggedUser, isError, error]
+      [token, userData, isLoadingLoggedUser, isError, error, isSuccess]
     ),
     tryLogin: { login, isLoginRejected, isLoginSuccessful },
     logout,
+    getLoggedInUserRole,
   };
 };
