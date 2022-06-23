@@ -12,30 +12,42 @@ import {
 } from "recharts";
 import { useAppSelector } from '../../redux/store';
 import { getAllBookList } from '../../redux/books/bookSlice';
-import { IBook } from '../../redux/Api/model/types';
+import { useGetAllBookQuery } from '../../redux/Api/api';
 
-type GenreArray = {
+type dataArray = {
     name: string,
     Quantity: number
 }
 
-type yearArray = {
-    name: number,
-    Quantity: number
-}
-
+// Extremly bad & trashy practice, should have create backend api to filter values
+// however, due to time constraint, have decide to proceed to wrangle values on the frontend.
 const Dashboard: React.FC = () => {
+    const { data, error, isLoading, isSuccess } = useGetAllBookQuery(null);
     const booklist = useAppSelector(getAllBookList);
-
-    const genreDataArray: GenreArray[] = []
-    booklist.map((obj: IBook) => {
-        genreDataArray.push({ name: obj.genre, Quantity: obj.quantity })
+  
+    // filter by genre
+    const genreCounter: any = {}
+    const genreDataArray: any[] = []
+    booklist.forEach((obj) => {
+        if (obj.genre in genreCounter) { genreCounter[obj.genre] += obj.quantity }
+        else { genreCounter[obj.genre] = obj.quantity }
     })
 
-    const yearDataArray: yearArray[] = []
-    booklist.map((obj: IBook) => {
-        yearDataArray.push({ name: obj.published_year, Quantity: obj.quantity })
+    for (const keys in genreCounter) {
+        genreDataArray.push({ name: keys, Quantity: genreCounter[keys] })
+    }
+
+    // filter by year published
+    const yearCounter: any = {}
+    const yearDataArray: dataArray[] = []
+    booklist.forEach((obj) => {
+        if (obj.published_year in yearCounter) { yearCounter[obj.published_year] += obj.quantity }
+        else { yearCounter[obj.published_year] = obj.quantity }
     })
+
+    for (const keys in yearCounter) {
+        yearDataArray.push({ name: keys, Quantity: yearCounter[keys] })
+    }
 
     return (
         <div>
