@@ -11,11 +11,17 @@ import CreateUpdateBookForm from '../../components/CreateUpdateBookForm';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useAuth } from '../../hooks/useAuth';
+import { UserRoleEnum } from '../../models/UserRoleEnum';
 
 
 const Index = () => {
+    const {
+        isAuthorized
+      } = useAuth();
+      
     const navigate = useNavigate();
-
+    
     const columns = ["Title", "Description", "Genre", "Author",
         "Published Year", "Quantity"];
 
@@ -32,13 +38,13 @@ const Index = () => {
             const selectedRowDataIndex = selectedRows.data[0].dataIndex;
             const arrIndexesForDeletion = selectedRows.data.map(obj => obj.dataIndex);
 
-            return (
-                <div>
+            return (<>
+                {isAuthorized([UserRoleEnum.ADMIN, UserRoleEnum.EDITOR]) && <div>
                     {selectedRows.data.length === 1 &&
                         <CreateUpdateBookForm action="update"
                             data={booklist[selectedRowDataIndex]._id} />
                     }
-                    <Tooltip title="Delete">
+                    {<Tooltip title="Delete">
                         <IconButton onClick={() => {
                             const arrIndexesForDeletion = selectedRows.data.map(obj => obj.dataIndex);
                             arrIndexesForDeletion.map(async (arrIndex) => {
@@ -50,8 +56,8 @@ const Index = () => {
                         }}>
                             <DeleteIcon />
                         </IconButton>
-                    </Tooltip>
-                </div>
+                    </Tooltip>}
+                </div>}</>
             );
         },
     }
