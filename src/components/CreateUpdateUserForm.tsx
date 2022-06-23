@@ -18,6 +18,8 @@ import Select from '@mui/material/Select';
 import { UserRoleEnum } from '../models/UserRoleEnum';
 import { UserStatusEnum } from '../models/userStatusEnum';
 import { useCreateUserMutation, useGetUserQuery, useUpdateUserMutation } from '../redux/Api/api';
+import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   action: string
@@ -25,6 +27,7 @@ type Props = {
 }
 
 const CreateUpdateUserForm: any = ({ action, data }: Props) => {
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -35,6 +38,9 @@ const CreateUpdateUserForm: any = ({ action, data }: Props) => {
   const [updateUser, { isError: isUpdateUserError, isSuccess: isUpdateUserSuccess, isLoading: isUpdateUserLoading }] = useUpdateUserMutation();
 
   console.log("selected row data _id: ", data)
+  const {
+    isAuthorized
+  } = useAuth();
 
   const {
     data: userData,
@@ -113,21 +119,23 @@ const CreateUpdateUserForm: any = ({ action, data }: Props) => {
 
   return (
     <div>
-      {action === 'update' && (
-        <Tooltip title="Update">
-          <IconButton onClick={handleClickOpen}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+      {isAuthorized([UserRoleEnum.ADMIN]) && <div>
+        {action === 'update' && (
+          <Tooltip title="Update">
+            <IconButton onClick={handleClickOpen}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+        )}
 
-      {action === 'create' && (
-        <Tooltip title={`Add `}>
-          <IconButton onClick={handleClickOpen}>
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+        {action === 'create' && (
+          <Tooltip title={`Add `}>
+            <IconButton onClick={handleClickOpen}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </div>}
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>User Management</DialogTitle>
