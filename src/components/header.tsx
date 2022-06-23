@@ -17,8 +17,8 @@ const AppBarHeader: React.FC<Props> = ({ headerName }: Props) => {
     const {
         loggedUser,
         logout,
-        getLoggedInUserRole,
-        isAuthorized
+        isAuthorized,
+        isTokenValid
     } = useAuth();
 
     const navigate = useNavigate()
@@ -43,7 +43,7 @@ const AppBarHeader: React.FC<Props> = ({ headerName }: Props) => {
                         </Button>
                     </Grid>}
 
-                    {getLoggedInUserRole() && <><Grid>
+                    {isTokenValid(loggedUser.token) && <><Grid>
                         <Button color="inherit" onClick={handleBooks}>
                             Book
                         </Button>
@@ -59,7 +59,7 @@ const AppBarHeader: React.FC<Props> = ({ headerName }: Props) => {
                         </Grid>
                     </Grid>
 
-                    {getLoggedInUserRole() && <Stack direction="row" spacing={2}>
+                    {isTokenValid(loggedUser.token) && <Stack direction="row" spacing={2}>
                         <Button variant="contained" color="error" onClick={logout}>
                             Logout
                         </Button>
