@@ -18,12 +18,12 @@ import { UserRoleEnum } from '../../models/UserRoleEnum';
 const Index = () => {
     const {
         isAuthorized
-      } = useAuth();
-      
+    } = useAuth();
+
     const navigate = useNavigate();
-    
+
     const columns = ["Title", "Description", "Genre", "Author",
-        "Published Year", "Quantity"];
+        "Published Year", "Quantity", "Availability"];
 
     const { data, error, isLoading, isSuccess } = useGetAllBookQuery(null);
     const [deleteBook, { isError: isDeleteBookRejected, isSuccess: isDeleteBookSuccess }]
