@@ -9,7 +9,9 @@ import {
 } from "../redux/auth/authSlice";
 import jwt_decode from "jwt-decode"
 import { UserRoleEnum } from "../models/UserRoleEnum";
-
+import moment from "moment"
+import { decode } from "punycode";
+import { isToken } from "typescript";
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -17,7 +19,6 @@ export const useAuth = () => {
 
   const token: string = useAppSelector(selectToken);
   const userid = useAppSelector(selectUserId);
-  const userObj = useAppSelector(selectUser)
 
   // automatically handles logout once the token and userid are removed from redux
   // update localStorage in sync with the store
@@ -57,20 +58,28 @@ export const useAuth = () => {
     }
   }
 
-  const getLoggedInUserRole = () => {
+  const isTokenValid = (token: string): boolean => {
     try {
-      if (token !== "") {
-        const decodedJwtToken: any = decodeJwt(token)
-        const currentUserRole = decodedJwtToken.role
-        return currentUserRole
-      }
-    } catch (err) {
-      console.log("Invalid Jwt Token: ", err)
+      const decodedToken: any = decodeJwt(token)
+      const timeNow = moment().unix()
+      const expireTime = timeNow - decodedToken.exp
+      return expireTime < 0 ? true : false
+    } catch {
+      console.log("Invalid Token")
+      return false
     }
   }
 
-  const isAuthorized = (authorizeUsers: UserRoleEnum[]) => {
-    if (token === "") { return false; }
+  const getLoggedInUserRole = () => {
+    if (isTokenValid(token)) {
+      const decodedJwtToken: any = decodeJwt(token)
+      const currentUserRole = decodedJwtToken.role
+      return currentUserRole
+    } else { console.log("Invalid Token") }
+  }
+
+  const isAuthorized = (authorizeUsers: UserRoleEnum[]): boolean => {
+    if (!isTokenValid(token)) { return false; }
     if (authorizeUsers.indexOf(getLoggedInUserRole()) === -1) { return false; }
     return true
   }
@@ -93,5 +102,6 @@ export const useAuth = () => {
     getLoggedInUserRole,
     decodeJwt,
     isAuthorized,
+    isTokenValid,
   };
 };
