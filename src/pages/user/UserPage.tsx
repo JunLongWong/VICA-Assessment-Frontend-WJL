@@ -9,10 +9,13 @@ import { UserRoleEnum } from "../../models/UserRoleEnum";
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useAuth } from "../../hooks/useAuth";
 
 
 const User = () => {
-
+    const {
+        isAuthorized
+      } = useAuth();
     const { data, error, isLoading, isSuccess } = useGetAllUserQuery(null);
     const userList = useAppSelector(getAllUserList)
     const [deleteUser, { isError: isDeleteBookRejected, isSuccess: isDeleteBookSuccess }]
@@ -37,7 +40,7 @@ const User = () => {
                         <CreateUpdateUserForm action="update"
                             data={userList[selectedRowDataIndex]._id} />
                     }
-                    <Tooltip title="Delete">
+                    {isAuthorized([UserRoleEnum.ADMIN]) && <Tooltip title="Delete">
                         <IconButton onClick={() => {
                             const arrIndexesForDeletion = selectedRows.data.map(obj => obj.dataIndex);
                             arrIndexesForDeletion.map(async (arrIndex) => {
@@ -55,7 +58,7 @@ const User = () => {
                         }}>
                             <DeleteIcon />
                         </IconButton>
-                    </Tooltip>
+                    </Tooltip>}
                 </div>
             );
         },
