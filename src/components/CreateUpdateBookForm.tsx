@@ -12,6 +12,8 @@ import AddIcon from '@mui/icons-material/Add';
 import Tooltip from '@mui/material/Tooltip';
 import { Box, Container } from '@mui/material';
 import { useCreateBookMutation, useGetBookQuery, useUpdateBookMutation } from '../redux/Api/api';
+import { useAuth } from '../hooks/useAuth';
+import { UserRoleEnum } from '../models/UserRoleEnum';
 
 
 type Props = {
@@ -21,6 +23,10 @@ type Props = {
 
 
 const CreateUpdateBookForm: any = ({ action, data }: Props) => {
+  const {
+    isAuthorized
+  } = useAuth();
+
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -117,21 +123,23 @@ const CreateUpdateBookForm: any = ({ action, data }: Props) => {
 
   return (
     <div>
-      {action === 'update' && (
-        <Tooltip title="Update">
-          <IconButton onClick={handleClickOpen}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+      {isAuthorized([UserRoleEnum.ADMIN, UserRoleEnum.EDITOR]) && <div>
+        {action === 'update' && (
+          <Tooltip title="Update">
+            <IconButton onClick={handleClickOpen}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+        )}
 
-      {action === 'create' && (
-        <Tooltip title={`Add `}>
-          <IconButton onClick={handleClickOpen}>
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+        {action === 'create' && (
+          <Tooltip title={`Add `}>
+            <IconButton onClick={handleClickOpen}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </div>}
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Book Management</DialogTitle>
