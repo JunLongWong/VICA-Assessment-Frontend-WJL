@@ -123,7 +123,7 @@ const CreateUpdateBookForm: any = ({ action, data }: Props) => {
 
   return (
     <div>
-      {isAuthorized([UserRoleEnum.ADMIN, UserRoleEnum.EDITOR]) && <div>
+      {isAuthorized([UserRoleEnum.SUPER_ADMIN,UserRoleEnum.ADMIN, UserRoleEnum.EDITOR]) && <div>
         {action === 'update' && (
           <Tooltip title="Update">
             <IconButton onClick={handleClickOpen}>
