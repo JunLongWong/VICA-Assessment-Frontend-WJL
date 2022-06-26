@@ -26,6 +26,7 @@ Dashboard & Analytics:
 ![fe2][fe2]
 ![fe3][fe3]
 ![fe4][fe4]
+![fe5][fe5]
 
 ## Available Scripts
 
@@ -75,3 +76,4 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 [fe2]: src/screenshots/userPage.png
 [fe3]: src/screenshots/bookPage.png
 [fe4]: src/screenshots/DashboardPage.png
+[fe5]: src/screenshots/Borrowing.png
