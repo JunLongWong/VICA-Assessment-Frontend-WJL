@@ -3,7 +3,6 @@ import type { RootState } from "../store";
 import { IBook } from "../Api/model/types";
 import { api } from "../Api/api";
 
-
 type BookListState = {
     bookList: IBook[];
     isSuccess: boolean | undefined;
@@ -63,6 +62,14 @@ const slice = createSlice({
             api.endpoints.updateBook.matchFulfilled,
             (state, action) => {
                 state.bookList = state.bookList.map(book => book._id !== action.payload.Book._id ? book : action.payload.Book)
+            }
+        );
+        
+        // decrement book quantity by 1 upon borrow
+        builder.addMatcher(
+            api.endpoints.createBorrowingHistory.matchFulfilled,
+            (state, action) => {
+                state.bookList = state.bookList.map(book => book._id !== action.payload.BorrowingHistory.book ? book : {...book, quantity:book.quantity-1} )
             }
         );
     },

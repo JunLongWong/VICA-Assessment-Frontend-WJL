@@ -1,8 +1,7 @@
 import AppBarHeader from '../../components/header';
-import { useGetAllBookQuery, useDeleteBookMutation } from '../../redux/Api/api';
+import { useGetAllBookQuery, useDeleteBookMutation, useCreateBorrowingHistoryMutation } from '../../redux/Api/api';
 import { MUIDataTableOptions } from "mui-datatables";
 import DataTables from '../../components/dataTables';
-import { useNavigate } from "react-router-dom";
 import {
     getAllBookList
 } from '../../redux/books/bookSlice'
@@ -13,51 +12,68 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAuth } from '../../hooks/useAuth';
 import { UserRoleEnum } from '../../models/UserRoleEnum';
-
+import Button from '@mui/material/Button';
+import { selectUserId } from '../../redux/auth/authSlice';
+import { BookAvailability } from '../../redux/Api/model/types';
 
 const Index = () => {
+    const userid = useAppSelector(selectUserId);
     const {
-        isAuthorized
+        isAuthorized,
     } = useAuth();
 
-    const navigate = useNavigate();
-
-    const columns = ["Title", "Description", "Genre", "Author",
-        "Published Year", "Quantity", "Availability"];
-
     const { data, error, isLoading, isSuccess } = useGetAllBookQuery(null);
-    const [deleteBook, { isError: isDeleteBookRejected, isSuccess: isDeleteBookSuccess }]
-        = useDeleteBookMutation();
+    const [deleteBook, { isError: isDeleteBookRejected, isSuccess: isDeleteBookSuccess }] = useDeleteBookMutation();
+
 
     const booklist = useAppSelector(getAllBookList);
+    const [createBorrowingHistory, { isError: isBorrowHistoryCreationError, isSuccess: isCreateBorrowHistorySuccess, isLoading: isCreateBorrowHistoryLoading }] = useCreateBorrowingHistoryMutation();
+
+    const columns = ["Title", "Description", "Genre", "Author",
+        "Published Year", "Quantity", "Availability"
+    ];
 
     const options: MUIDataTableOptions = {
         filterType: 'checkbox',
         customToolbar: () => { return (<CreateUpdateBookForm action="create" />) },
+        isRowSelectable: (dataIndex) => { if (booklist[dataIndex].quantity <= 0) { return false; } else { return true; } },
         customToolbarSelect: (selectedRows, displayData, setSelectedRows) => {
             const selectedRowDataIndex = selectedRows.data[0].dataIndex;
-            const arrIndexesForDeletion = selectedRows.data.map(obj => obj.dataIndex);
-
-            return (<>
-                {isAuthorized([UserRoleEnum.ADMIN, UserRoleEnum.EDITOR]) && <div>
-                    {selectedRows.data.length === 1 &&
-                        <CreateUpdateBookForm action="update"
-                            data={booklist[selectedRowDataIndex]._id} />
+            const selectedDataIndexes = selectedRows.data.map(obj => obj.dataIndex)
+            return (
+                <>
+                    {
+                        <Button variant="contained" color="success" onClick={
+                            () => {
+                                selectedDataIndexes.forEach(async (index) => {
+                                    await createBorrowingHistory({ user: userid, book: booklist[index]._id })
+                                })
+                            }
+                        }>
+                            Borrow
+                        </Button>
                     }
-                    {<Tooltip title="Delete">
-                        <IconButton onClick={() => {
-                            const arrIndexesForDeletion = selectedRows.data.map(obj => obj.dataIndex);
-                            arrIndexesForDeletion.map(async (arrIndex) => {
-                                if (isSuccess) {
-                                    const rowId = booklist[arrIndex]._id;
-                                    await deleteBook(rowId);
-                                }
-                            });
-                        }}>
-                            <DeleteIcon />
-                        </IconButton>
-                    </Tooltip>}
-                </div>}</>
+
+                    {isAuthorized([UserRoleEnum.ADMIN, UserRoleEnum.EDITOR]) && <div>
+                        {selectedRows.data.length === 1 &&
+                            <CreateUpdateBookForm action="update"
+                                data={booklist[selectedRowDataIndex]._id} />
+                        }
+                        {<Tooltip title="Delete">
+                            <IconButton onClick={() => {
+                                const arrIndexesForDeletion = selectedRows.data.map(obj => obj.dataIndex);
+                                arrIndexesForDeletion.map(async (arrIndex) => {
+                                    if (isSuccess) {
+                                        const rowId = booklist[arrIndex]._id;
+                                        await deleteBook(rowId);
+                                    }
+                                });
+                            }}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>}
+                    </div>}
+                </>
             );
         },
     }
