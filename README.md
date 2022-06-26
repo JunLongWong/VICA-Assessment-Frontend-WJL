@@ -11,7 +11,7 @@ Redux Store libraries used:
 All base pages are stored in the pages folder.
 Common re-usable components are stored in components folder.
 
-Authentication & Authorization [yet to complete]:
+Authentication & Authorization:
 Jwt token is stored on local storage.
 Upon login, it will be set on the store once login request is fulfilled.
 Custom useAuth() hooks to encapsulate login,logout & management of token.
@@ -20,6 +20,9 @@ Dashboard & Analytics:
 - Bar charts used to render breakdown of books by genre && year published.
 - Libraries used: Re-charts
 
+History Page[Under active development]:
+- List borrowing / returning history
+- Return of books
 
 ### Screenshots of pages
 ![fe1][fe1]
