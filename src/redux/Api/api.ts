@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { UserRoleEnum } from '../../models/UserRoleEnum';
 import { UserStatusEnum } from '../../models/userStatusEnum';
 import { RootState } from '../store';
-import { IBook, IUser } from './model/types';
+import { IBook, IBorrowHistory, IUser } from './model/types';
 
 export interface createUserRequest {
   _id?: string;
@@ -20,6 +20,12 @@ export interface createBookRequest {
   author: string;
   published_year: number;
   quantity: number;
+}
+
+export interface createUpdateBorrowHistoryRequest {
+  _id?: string;
+  user: string;
+  book: string;
 }
 
 export const api = createApi({
@@ -66,9 +72,6 @@ export const api = createApi({
       })
     }),
 
-
-
-
     getBook: builder.query<{ Book: IBook }, string>({
       query: (id) => ({ url: `books/${id}` }),
 
@@ -79,10 +82,10 @@ export const api = createApi({
     }),
 
     createBook: builder.mutation<{ Book: IBook }, createBookRequest>({
-      query: (user) => ({
+      query: (book) => ({
         url: `books`,
         method: "POST",
-        body: user
+        body: book
       })
     }),
     updateBook: builder.mutation<{ Book: IBook }, IBook>({
@@ -100,6 +103,30 @@ export const api = createApi({
       })
     }),
 
+    getBorrowingHistory: builder.query<{ BorrowHistoryData: IBorrowHistory }, string>({
+      query: (id) => ({ url: `borrowhistory/${id}` }),
+
+    }),
+
+    getAllBorrowingHistory: builder.query<{ BorrowingHistory: IBorrowHistory[] }, null>({
+      query: () => ({ url: `borrowhistory/` }),
+    }),
+
+    createBorrowingHistory: builder.mutation<{ BorrowingHistory: IBorrowHistory }, createUpdateBorrowHistoryRequest>({
+      query: (borrowHistory) => ({
+        url: `borrowhistory`,
+        method: "POST",
+        body: borrowHistory
+      })
+    }),
+
+    updateBorrowingHistory: builder.mutation<{ BorrowingHistory: IBorrowHistory }, createUpdateBorrowHistoryRequest>({
+      query: ({ _id, ...rest }) => ({
+        url: `borrowhistory/${_id}`,
+        method: "PUT",
+        body: rest
+      })
+    })
   }),
 })
 
@@ -110,9 +137,15 @@ export const {
   useDeleteUserMutation,
   useCreateUserMutation,
   useUpdateUserMutation,
+
   useGetBookQuery,
   useGetAllBookQuery,
   useCreateBookMutation,
   useUpdateBookMutation,
   useDeleteBookMutation,
+
+  useGetBorrowingHistoryQuery,
+  useGetAllBorrowingHistoryQuery,
+  useCreateBorrowingHistoryMutation,
+  useUpdateBorrowingHistoryMutation,
 } = api
