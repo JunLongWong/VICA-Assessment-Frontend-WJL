@@ -35,6 +35,8 @@ History Page[Under active development]:
 
 In the project directory, you can run:
 
+### `npm install`
+To install node_modules & dependencies.
 ### `npm start`
 
 Runs the app in the development mode.\
