@@ -16,5 +16,23 @@ export interface IBook {
     genre: string;
     author: string;
     published_year: number;
-    quantity: number
+    quantity: number;
+    availability?: BookAvailability;
+}
+export enum BookAvailability {
+    AVAILABLE="AVAILABLE",
+    UNAVAILABLE="UNAVAILABLE",
+}
+export interface BorrowingStatus {
+    BORROWED: "BORROWED",
+    RETURNED: "RETURNED",
+}
+
+export interface IBorrowHistory {
+    _id: string;
+    user: string;
+    book: string;
+    date_borrowed: Date;
+    date_returned?: Date;
+    status: BorrowingStatus
 }
